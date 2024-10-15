@@ -21,12 +21,10 @@ class produkController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('products.create'); // Menampilkan form untuk membuat produk baru
+        
+        return view('products.buat'); 
     }
 
     /**
@@ -34,8 +32,31 @@ class produkController extends Controller
      */
     public function store(StoreprodukRequest $request)
     {
-        produk::create($request->validated()); // Menyimpan produk baru dengan data validasi
-        return redirect()->route('dashboard')->with('success', 'Produk berhasil ditambahkan.');
+        $request->validate([
+            'p_id' => 'required',
+            'p_nama' => 'required',
+            'p_harga' => 'required',
+            'p_stok' => 'required',
+            'p_deskripsi' => 'required',
+            'p_kategori' => 'required',
+            'p_gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'p_berat' => 'required',
+            'penjual_id' => 'required',
+        ]);
+
+        $input = $request->all();
+
+        if ($image = $request->file('p_gambar')) {
+            $destinationPath = 'image/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['p_gambar'] = "$profileImage";
+        }
+
+        produk::create($input);
+
+        return redirect()->route('dashboard')
+            ->with('success','produk created successfully.');
     }
 
     /**

@@ -20,6 +20,11 @@
                         </button>
                     </form>
 
+                    <a href="{{ route('products.create') }}" method="GET"
+                        class="inline-block mb-4 px-4 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-500">
+                        Create New Product
+                    </a>
+
                     <!-- Product Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($produkku as $product)

@@ -13,6 +13,13 @@ Route::get('/dashboard', [produkController::class, 'index'])->middleware(['auth'
 Route::get('/produk/{produk}', [produkController::class, 'show'])->name('products.show');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [produkController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/produk/{produk}', [produkController::class, 'show'])->name('products.show');
+    Route::get('/create', [produkController::class, 'create'])->name('products.create');
+    Route::post('/produk', [produkController::class, 'store'])->name('products.store');
+});
+
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
