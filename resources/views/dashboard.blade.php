@@ -36,6 +36,10 @@
                                             class="text-green-500 font-bold">Rp{{ number_format($product->p_harga, 0, ',', '.') }}</span>
                                     </div>
                                     <div class="mt-4">
+                                        <a href="{{ route('products.show', $product->p_id) }}">
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                Detail Produk</h3>
+                                        </a>
                                         <!-- Add to Cart Button -->
                                         <a href="{{ route('cart.add', $product->p_id) }}"
                                             class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
