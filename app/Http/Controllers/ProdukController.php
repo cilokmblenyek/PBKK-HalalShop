@@ -26,7 +26,7 @@ class produkController extends Controller
      */
     public function create()
     {
-        
+        return view('products.create'); // Menampilkan form untuk membuat produk baru
     }
 
     /**
@@ -34,7 +34,8 @@ class produkController extends Controller
      */
     public function store(StoreprodukRequest $request)
     {
-        //
+        produk::create($request->validated()); // Menyimpan produk baru dengan data validasi
+        return redirect()->route('dashboard')->with('success', 'Produk berhasil ditambahkan.');
     }
 
     /**
@@ -42,10 +43,8 @@ class produkController extends Controller
      */
     public function show(produk $produk)
     {
-        $pegawai = produk::find( $produk->p_id );
-        if (!$pegawai) {
-            abort(404, 'Data tidak ditemukan');
-        }
+        // Menampilkan detail produk
+        return view('products.show', compact('produk')); // Menggunakan view untuk menampilkan detail
     }
 
     /**
@@ -53,7 +52,7 @@ class produkController extends Controller
      */
     public function edit(produk $produk)
     {
-        //
+        return view('products.edit', compact('produk')); // Menampilkan form untuk mengedit produk
     }
 
     /**
@@ -61,7 +60,8 @@ class produkController extends Controller
      */
     public function update(UpdateprodukRequest $request, produk $produk)
     {
-        //
+        $produk->update($request->validated()); // Memperbarui produk dengan data validasi
+        return redirect()->route('dashboard')->with('success', 'Produk berhasil diperbarui.');
     }
 
     /**
@@ -69,6 +69,7 @@ class produkController extends Controller
      */
     public function destroy(produk $produk)
     {
-        //
+        $produk->delete(); // Menghapus produk
+        return redirect()->route('dashboard')->with('success', 'Produk berhasil dihapus.');
     }
 }
