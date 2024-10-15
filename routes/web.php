@@ -12,8 +12,6 @@ Route::get('/', function () {
 Route::get('/dashboard', [produkController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/produk/{produk}', [produkController::class, 'show'])->name('products.show');
 
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
