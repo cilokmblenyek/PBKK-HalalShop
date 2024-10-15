@@ -57,10 +57,49 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Product removed from cart.');
     }
 
-    // Clear the entire cart (Checkout simulation)
-    public function checkout(Request $request)
+    public function decrease($p_id)
     {
+        $cart = session()->get('cart');
+
+        if ($cart[$p_id]['quantity'] > 1) {
+            $cart[$p_id]['quantity']--;
+        }
+
+        session()->put('cart', $cart);
+        return redirect()->route('cart.index')->with('success', 'Quantity decreased');
+    }
+
+    // Increase quantity
+    public function increase($p_id)
+    {
+        $cart = session()->get('cart');
+
+        // Optionally, you can check if stock is available before increasing
+        $product = produk::find($p_id);
+        if ($cart[$p_id]['quantity'] < $product->p_stok) {
+            $cart[$p_id]['quantity']++;
+        }
+
+        session()->put('cart', $cart);
+        return redirect()->route('cart.index')->with('success', 'Quantity increased');
+    }
+
+    // Checkout - reduce stock
+    public function checkout()
+    {
+        $cart = session()->get('cart');
+
+        foreach ($cart as $p_id => $item) {
+            $product = produk::find($p_id);
+            if ($product) {
+                // Decrease stock
+                $product->p_stok -= $item['quantity'];
+                $product->save();
+            }
+        }
+
+        // Clear the cart
         session()->forget('cart');
-        return redirect()->route('cart.index')->with('success', 'Checkout complete!');
+        return redirect()->route('cart.index')->with('success', 'Checkout successful and stock updated');
     }
 }

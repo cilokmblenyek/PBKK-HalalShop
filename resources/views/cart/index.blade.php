@@ -19,16 +19,20 @@
                         <tr class="border-b border-gray-200 dark:border-gray-700">
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                                Product Name</th>
+                                Product Name
+                            </th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                                Price</th>
+                                Price
+                            </th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                                Quantity</th>
+                                Quantity
+                            </th>
                             <th
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                                Actions</th>
+                                Actions
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,7 +46,26 @@
                                     Rp{{ number_format($item['price'], 0, ',', '.') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    {{ $item['quantity'] }}
+                                    <div class="flex items-center space-x-2">
+                                        <!-- Decrease Quantity Button -->
+                                        <form action="{{ route('cart.decrease', $p_id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit"
+                                                class="inline-flex items-center px-2 py-1 bg-gray-300 dark:bg-gray-600 border border-transparent rounded-md text-xs text-black dark:text-white uppercase hover:bg-gray-400 focus:outline-none">
+                                                -
+                                            </button>
+                                        </form>
+                                        <!-- Display Current Quantity -->
+                                        <span>{{ $item['quantity'] }}</span>
+                                        <!-- Increase Quantity Button -->
+                                        <form action="{{ route('cart.increase', $p_id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit"
+                                                class="inline-flex items-center px-2 py-1 bg-gray-300 dark:bg-gray-600 border border-transparent rounded-md text-xs text-black dark:text-white uppercase hover:bg-gray-400 focus:outline-none">
+                                                +
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <a href="{{ route('cart.remove', $p_id) }}"
