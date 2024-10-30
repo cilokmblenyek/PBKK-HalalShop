@@ -9,7 +9,7 @@ class produk extends Model
 {
     use HasFactory;
 
-    protected $table = 'produks';
+    protected $table = 'products';
     protected $primaryKey = 'p_id';
     public $incrementing = false;  // Assuming your IDs are not auto-incrementing
     protected $keyType = 'string'; // If your IDs are strings and not integers
