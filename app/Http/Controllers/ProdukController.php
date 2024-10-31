@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 
 class produkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Display a listing of the products on the dashboard
     public function index(Request $request)
     {
         $filters = $request->only(['search']);
@@ -27,70 +25,101 @@ class produkController extends Controller
         return view('products.buat'); 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // // Store a newly created product in storage
     public function store(StoreprodukRequest $request)
     {
-        $request->validate([
-            'p_id' => 'required',
-            'p_nama' => 'required',
-            'p_harga' => 'required',
-            'p_stok' => 'required',
-            'p_deskripsi' => 'required',
-            'p_kategori' => 'required',
-            'p_gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'p_berat' => 'required',
-            'penjual_id' => 'required',
-        ]);
+    // // Validate request data
+    $validatedData = $request->validate([
+        'p_id' => 'required|unique:products,p_id',
+        'p_nama' => 'required|string',
+        'p_harga' => 'required|integer',
+        'p_stok' => 'required|integer',
+        'p_deskripsi' => 'required|string',
+        'p_kategori' => 'required|string',
+        'p_gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'p_berat' => 'required|integer',
+        'penjual_p_id' => 'required|integer',
+    ]);
 
-        $input = $request->all();
-
-        if ($image = $request->file('p_gambar')) {
-            $destinationPath = 'image/';
-            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $profileImage);
-            $input['p_gambar'] = "$profileImage";
-        }
-
-        produk::create($input);
-
-        return redirect()->route('dashboard')
-            ->with('success','produk created successfully.');
+    // Handle file upload
+    if ($request->hasFile('p_gambar')) {
+        $file = $request->file('p_gambar');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        echo $filename;
+        $file->storeAs('images/', $filename);
+        echo public_path('images');
+        $validatedData['p_gambar'] = $filename;
     }
 
-    /**
-     * Display the specified resource.
-     */
+    $validatedData['penjual_p_id'] = auth()->id();
+    
+    // Create a new product
+    produk::create($validatedData);
+
+    return redirect()->route('dashboard')->with('success', 'Product created successfully!');
+    }
+
+
+    // Show product details
     public function show(produk $produk)
     {
         // Menampilkan detail produk
         return view('products.show', compact('produk')); // Menggunakan view untuk menampilkan detail
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // Show the form for editing the specified resource
     public function edit(produk $produk)
     {
         return view('products.edit', compact('produk')); // Menampilkan form untuk mengedit produk
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
+    
+    
+    // Update the specified resource in storage
     public function update(UpdateprodukRequest $request, produk $produk)
     {
-        $produk->update($request->validated()); // Memperbarui produk dengan data validasi
+        // Validasi data yang diinput
+        $validatedData = $request->validate([
+            'p_nama' => 'required|string',
+            'p_harga' => 'required|integer',
+            'p_stok' => 'required|integer',
+            'p_deskripsi' => 'required|string',
+            'p_kategori' => 'required|string',
+            'p_gambar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'p_berat' => 'required|integer',
+        ]);
+
+        // Jika ada gambar baru yang diunggah, hapus gambar lama dan simpan yang baru
+        if ($request->hasFile('p_gambar')) {
+            // Hapus gambar lama jika ada dan file-nya benar-benar ada di server
+            if ($produk->p_gambar && file_exists(public_path('images/' . $produk->p_gambar))) {
+                unlink(public_path('images/' . $produk->p_gambar));
+            }
+            
+            // Simpan gambar baru
+            $file = $request->file('p_gambar');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+            
+            // Set the new filename in the validated data array
+            $validatedData['p_gambar'] = $filename;
+        }
+
+        // Update produk dengan data yang telah divalidasi
+        $produk->update($validatedData);
+
         return redirect()->route('dashboard')->with('success', 'Produk berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(produk $produk)
     {
-        $produk->delete(); // Menghapus produk
+        // Hapus gambar jika ada
+        if ($produk->p_gambar) {
+            unlink(public_path('images/' . $produk->p_gambar));
+        }
+
+        // Hapus produk
+        $produk->delete();
+
         return redirect()->route('dashboard')->with('success', 'Produk berhasil dihapus.');
     }
 }

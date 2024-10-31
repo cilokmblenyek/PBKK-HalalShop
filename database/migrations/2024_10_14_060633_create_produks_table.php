@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('produks', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->char('p_id', 3)->primary();
             $table->string('p_nama');
             $table->string('p_gambar');
@@ -19,8 +19,8 @@ return new class extends Migration
             $table->integer('p_stok');
             $table->string('p_deskripsi');
             $table->string('p_kategori');
-            $table->dateTime('p_tgldibuat');
-            $table->dateTime('p_tglupdate');
+            $table->dateTime('p_tgldibuat')->default(now());
+            $table->dateTime('p_tglupdate')->default(now());
             $table->integer('p_berat');
             $table->bigInteger('penjual_p_id')->unsigned();
             $table->timestamps();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('produks');
+        Schema::dropIfExists('products');
     }
 };

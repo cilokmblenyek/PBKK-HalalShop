@@ -6,23 +6,23 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreprodukRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        return true; // Set to true if the request should be authorized
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    public function rules()
     {
         return [
-            //
+            'p_id' => 'required|unique:products,p_id',
+            'p_nama' => 'required|string',
+            'p_harga' => 'required|integer',
+            'p_stok' => 'required|integer',
+            'p_deskripsi' => 'required|string',
+            'p_kategori' => 'required|string',
+            'p_gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'p_berat' => 'required|integer',
+            'penjual_p_id' => 'required|integer',
         ];
     }
 }
