@@ -13,10 +13,10 @@
                     <div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
                         <h1 class="text-2xl font-bold mb-4">{{ $produk->p_nama }}</h1>
                         
-                        <img src="{{ URL::asset('images/' . $produk->p_gambar) }}" alt="{{ $produk->p_nama }}" class="w-full h-auto mb-6 rounded-md">
-
+                        <img src="{{ asset('images/' . $produk->p_gambar) }}" alt="{{ $produk->p_nama }}" class="w-full h-auto mb-6 rounded-md">
+                        
                         <p class="mb-4 text-gray-600 dark:text-gray-400">{{ $produk->p_deskripsi }}</p>
-
+                        
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <p class="font-semibold">Stock:</p>
@@ -34,8 +34,12 @@
                                 <p class="font-semibold">Weight:</p>
                                 <p>{{ $produk->p_berat }} grams</p>
                             </div>
+                            <div>
+                                <p class="font-semibold">Halal Status:</p>
+                                <p>{{ $produk->halal_status }}</p>
+                            </div>
                         </div>
-
+                        
                         <p class="mt-6 font-semibold">Created At: {{ $produk->p_tgldibuat }}</p>
                         <p class="mt-2 font-semibold">Updated At: {{ $produk->p_tglupdate }}</p>
 

@@ -3,23 +3,23 @@
     use App\Http\Controllers\ProfileController;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\CartController;
-    use App\Http\Controllers\produkController;
+    use App\Http\Controllers\ProductController;
 
     Route::get('/', function () {
         return view('welcome');
     });
 
-    Route::get('/dashboard', [produkController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-    Route::get('/produk/{produk}', [produkController::class, 'show'])->name('products.show');
+    Route::get('/dashboard', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/produk/{produk}', [ProductController::class, 'show'])->name('products.show');
 
     Route::middleware('auth')->group(function () {
-        Route::get('/dashboard', [produkController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-        Route::get('/produk/{produk}', [produkController::class, 'show'])->name('products.show');
-        Route::get('/create', [produkController::class, 'create'])->name('products.create');
-        Route::post('/produk', [produkController::class, 'store'])->name('products.store');
-        Route::get('/produk/{produk}/edit', [produkController::class, 'edit'])->name('products.edit');
-        Route::put('/produk/{produk}', [produkController::class, 'update'])->name('products.update');
-        Route::delete('/produk/{produk}', [produkController::class, 'destroy'])->name('products.destroy');
+        Route::get('/dashboard', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+        Route::get('/produk/{produk}', [ProductController::class, 'show'])->name('products.show');
+        Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/produk', [ProductController::class, 'store'])->name('products.store');
+        Route::get('/produk/{produk}/edit', [ProductController::class, 'edit'])->name('products.edit');
+        Route::put('/produk/{produk}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/produk/{produk}', [ProductController::class, 'destroy'])->name('products.destroy');
     });
 
     Route::middleware('auth')->group(function () {

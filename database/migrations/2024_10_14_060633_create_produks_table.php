@@ -23,6 +23,7 @@ return new class extends Migration
             $table->dateTime('p_tglupdate')->default(now());
             $table->integer('p_berat');
             $table->bigInteger('penjual_p_id')->unsigned();
+            $table->string('halal_status')->default('undetermined');
             $table->timestamps();
         });
     }
