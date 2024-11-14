@@ -24,6 +24,7 @@ class produk extends Model
         'p_kategori',
         'p_berat',
         'penjual_p_id',
+        'halal_status', 
     ];
 
     public function scopeFilter($query, array $filters)

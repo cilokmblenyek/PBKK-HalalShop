@@ -13,13 +13,32 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    protected $roboflowService;
-
-    public function __construct(RoboflowService $roboflowService)
+    private function sendToRoboflow($imagePath)
     {
-        $this->roboflowService = $roboflowService;
-
-        Log::info('Testing log creation');
+        try {
+            // Convert the image to base64
+            $imageBase64 = base64_encode(file_get_contents($imagePath));
+    
+            // Prepare the GuzzleHttp client
+            $client = new \GuzzleHttp\Client();
+    
+            // Make the POST request to Roboflow API
+            $response = $client->post(env('ROBOFLOW_API_URL'), [
+                'headers' => [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'query' => [
+                    'api_key' => env('ROBOFLOW_API_KEY'),
+                ],
+                'body' => $imageBase64,
+            ]);
+    
+            // Parse the response and return the JSON result
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (\Exception $e) {
+            // Handle errors
+            return ['error' => $e->getMessage()];
+        }
     }
 
     // Read Function
@@ -38,48 +57,113 @@ class ProductController extends Controller
         return view('products.buat'); 
     }
 
-    // Create Function
+    
+    // Store Function
     public function store(StoreprodukRequest $request)
     {
-        // Validate request data
-        $validatedData = $request->validate([
-            'p_id' => 'required|unique:products,p_id',
-            'p_nama' => 'required|string',
-            'p_harga' => 'required|integer',
-            'p_stok' => 'required|integer',
-            'p_deskripsi' => 'required|string',
-            'p_kategori' => 'required|string',
-            'p_gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'p_berat' => 'required|integer',
-            'penjual_p_id' => 'required|integer',
-        ]);
+            // Validate request data
+            $validatedData = $request->validate([
+                'p_id' => 'required|unique:products,p_id',
+                'p_nama' => 'required|string',
+                'p_harga' => 'required|integer',
+                'p_stok' => 'required|integer',
+                'p_deskripsi' => 'required|string',
+                'p_kategori' => 'required|string',
+                'p_gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'p_berat' => 'required|integer',
+                'penjual_p_id' => 'required|integer',
+            ]);
 
-        // Handle file upload
-        if ($request->hasFile('p_gambar')) {
-            $file = $request->file('p_gambar');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            
-            /// Simpan file
-            $file->move(public_path('images'), $filename);
-            
-            // Update path gambar di database
-            $validatedData['p_gambar'] = $filename;
+            if ($request->hasFile('p_gambar')) {
+                $file = $request->file('p_gambar');
 
-            // Path untuk Roboflow
-            $fullPath = storage_path('app/public/images/' . $filename);
+                // Generate filename
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                // Move file
+                $file->move(public_path('images'), $filename);
 
-            
-            $halalStatus = $this->roboflowService->detectHalalStatus($fullPath);
-            $validatedData['halal_status'] = $halalStatus;
-            
-        }
-        $validatedData['penjual_p_id'] = Auth::user()->id;
+                $filePath = public_path('images');
+                
+               
+                
+                // Update path
+                $validatedData['p_gambar'] = $filename;
+
+                // Get the full path of the image
+                $fileFullPath = $filePath . "\\" . $filename;
         
-        // Create a new product
-        produk::create($validatedData);
+                // Send the image to the Roboflow API using Guzzle
+                $response = $this->sendToRoboflow($fileFullPath);
+                
+                if ($response['predictions'][0]['confidence'] > 0.6) {
+                    $halalStatus = 'Halal';
+                } else {
+                    $halalStatus = 'Unsure';
+                }
 
-        return redirect()->route('dashboard')->with('success', 'Product created successfully!');
+                $validatedData['halal_status'] = $halalStatus;
+             
+            }
+
+            $validatedData['halal_status'] = $halalStatus;
+            echo $halalStatus;
+            dd($valideatedData);
+
+            $validatedData['penjual_p_id'] = auth()->id();
+            
+            // Create product
+            $product = produk::create($validatedData);
+
+            return redirect()->route('dashboard')
+                ->with('success', "Product created successfully! Halal Status:");
     }
+
+
+    // public function store(StoreprodukRequest $request)
+    // {
+    //     // Validate request data
+    //     $validatedData = $request->validate([
+    //         'p_id' => 'required|unique:products,p_id',
+    //         'p_nama' => 'required|string',
+    //         'p_harga' => 'required|integer',
+    //         'p_stok' => 'required|integer',
+    //         'p_deskripsi' => 'required|string',
+    //         'p_kategori' => 'required|string',
+    //         'p_gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    //         'p_berat' => 'required|integer',
+    //         'penjual_p_id' => 'required|integer',
+    //     ]);
+    
+    //     // Save the uploaded image to the public path
+    //     if ($request->file('image')) {
+    //         $imageName = time() . '.' . $request->image->extension();
+    //         $imagePath = public_path('images/');
+
+    
+    //         // Move the image to the 'images/search' directory
+    //         $request->image->move($imagePath, $imageName);
+
+    //         $validatedData['p_gambar'] = $imageName;
+    
+    //         // Get the full path of the image
+    //         $imageFullPath = $imagePath . '/' . $imageName;
+    //         echo $imageFullPath;
+    //         dd($imageFullPath);
+    
+    //         // Send the image to the Roboflow API using Guzzle
+    //         $response = $this->sendToRoboflow($imageFullPath);
+    //         dd($response);
+
+            
+    //     }
+    //     $validatedData['penjual_p_id'] = auth()->id();
+
+    //     $product = produk::create($validatedData);
+
+    // //         return redirect()->route('dashboard')
+    // //             ->with('success', "Product created successfully! Halal Status:");
+
+    // }
 
 
     // Show product details
