@@ -61,110 +61,51 @@ class ProductController extends Controller
     // Store Function
     public function store(StoreprodukRequest $request)
     {
-            // Validate request data
-            $validatedData = $request->validate([
-                'p_id' => 'required|unique:products,p_id',
-                'p_nama' => 'required|string',
-                'p_harga' => 'required|integer',
-                'p_stok' => 'required|integer',
-                'p_deskripsi' => 'required|string',
-                'p_kategori' => 'required|string',
-                'p_gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'p_berat' => 'required|integer',
-                'penjual_p_id' => 'required|integer',
-            ]);
+        $validatedData = $request->validate([
+            'p_id' => 'required|unique:products,p_id',
+            'p_nama' => 'required|string',
+            'p_harga' => 'required|integer',
+            'p_stok' => 'required|integer',
+            'p_deskripsi' => 'required|string',
+            'p_kategori' => 'required|string',
+            'p_gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'p_berat' => 'required|integer',
+        ]);
 
-            if ($request->hasFile('p_gambar')) {
-                $file = $request->file('p_gambar');
+        if (!$request->hasFile('p_gambar')) {
+            return back()->withError('No file uploaded.');
+        }
 
-                // Generate filename
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                // Move file
-                $file->move(public_path('images'), $filename);
+        $file = $request->file('p_gambar');
+        if (!$file->isValid()) {
+            return back()->withError('File upload failed.');
+        }
 
-                $filePath = public_path('images');
-                
-               
-                
-                // Update path
-                $validatedData['p_gambar'] = $filename;
+        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('images'), $filename);
 
-                // Get the full path of the image
-                $fileFullPath = $filePath . "\\" . $filename;
-        
-                // Send the image to the Roboflow API using Guzzle
-                $response = $this->sendToRoboflow($fileFullPath);
-                
-                if ($response['predictions'][0]['confidence'] > 0.6) {
-                    $halalStatus = 'Halal';
-                } else {
-                    $halalStatus = 'Unsure';
-                }
+        $fileFullPath = public_path("images/{$filename}");
+        if (!file_exists($fileFullPath)) {
+            return back()->withError('File not found after being uploaded.');
+        }
 
-                $validatedData['halal_status'] = $halalStatus;
-             
-            }
+        $response = $this->sendToRoboflow($fileFullPath);
+        if (isset($response['error'])) {
+            Log::error('Roboflow Error: ' . $response['error']);
+            return back()->withError('Failed to process image with Roboflow.');
+        }
 
-            $validatedData['halal_status'] = $halalStatus;
-            echo $halalStatus;
-            dd($valideatedData);
+        $halalStatus = ($response['predictions'][0]['confidence'] > 0.6) ? 'Halal' : 'Unsure';
 
-            $validatedData['penjual_p_id'] = auth()->id();
-            
-            // Create product
-            $product = produk::create($validatedData);
+        $validatedData['p_gambar'] = $filename;
+        $validatedData['halal_status'] = $halalStatus;
+        $validatedData['penjual_p_id'] = auth()->id();
 
-            return redirect()->route('dashboard')
-                ->with('success', "Product created successfully! Halal Status:");
+        produk::create($validatedData);
+
+        return redirect()->route('dashboard')
+            ->with('success', "Product created successfully! Halal Status: {$halalStatus}");
     }
-
-
-    // public function store(StoreprodukRequest $request)
-    // {
-    //     // Validate request data
-    //     $validatedData = $request->validate([
-    //         'p_id' => 'required|unique:products,p_id',
-    //         'p_nama' => 'required|string',
-    //         'p_harga' => 'required|integer',
-    //         'p_stok' => 'required|integer',
-    //         'p_deskripsi' => 'required|string',
-    //         'p_kategori' => 'required|string',
-    //         'p_gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-    //         'p_berat' => 'required|integer',
-    //         'penjual_p_id' => 'required|integer',
-    //     ]);
-    
-    //     // Save the uploaded image to the public path
-    //     if ($request->file('image')) {
-    //         $imageName = time() . '.' . $request->image->extension();
-    //         $imagePath = public_path('images/');
-
-    
-    //         // Move the image to the 'images/search' directory
-    //         $request->image->move($imagePath, $imageName);
-
-    //         $validatedData['p_gambar'] = $imageName;
-    
-    //         // Get the full path of the image
-    //         $imageFullPath = $imagePath . '/' . $imageName;
-    //         echo $imageFullPath;
-    //         dd($imageFullPath);
-    
-    //         // Send the image to the Roboflow API using Guzzle
-    //         $response = $this->sendToRoboflow($imageFullPath);
-    //         dd($response);
-
-            
-    //     }
-    //     $validatedData['penjual_p_id'] = auth()->id();
-
-    //     $product = produk::create($validatedData);
-
-    // //         return redirect()->route('dashboard')
-    // //             ->with('success', "Product created successfully! Halal Status:");
-
-    // }
-
 
     // Show product details
     public function show(produk $produk)
