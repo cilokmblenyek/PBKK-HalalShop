@@ -59,6 +59,9 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "platform": {
+            "php-path": "C:\\laragon\\bin\\php\\php-8.4.1-nts-Win32-vs17-x64\\php.exe"
         }
     },
     "minimum-stability": "stable",

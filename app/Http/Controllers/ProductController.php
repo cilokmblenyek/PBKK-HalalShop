@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
+function resizeImage($filePath, $width, $height)
+{
+    $image = imagecreatefromstring(file_get_contents($filePath));
+    $resizedImage = imagescale($image, $width, $height);
+    imagejpeg($resizedImage, $filePath); // Overwrite the original file
+    imagedestroy($image);
+    imagedestroy($resizedImage);
+}
+
 class ProductController extends Controller
 {
     private function sendToRoboflow($imagePath)
@@ -89,13 +98,18 @@ class ProductController extends Controller
             return back()->withError('File not found after being uploaded.');
         }
 
+        // Resize for Roboflow
+        resizeImage($fileFullPath, 640, 640);
+
         $response = $this->sendToRoboflow($fileFullPath);
         if (isset($response['error'])) {
             Log::error('Roboflow Error: ' . $response['error']);
             return back()->withError('Failed to process image with Roboflow.');
         }
 
-        $halalStatus = ($response['predictions'][0]['confidence'] > 0.6) ? 'Halal' : 'Unsure';
+        Log::info('Roboflow Response: ', $response);
+
+        $halalStatus = ($response['predictions'][0]['confidence'] > 0.4) ? 'Halal' : 'Unsure';
 
         $validatedData['p_gambar'] = $filename;
         $validatedData['halal_status'] = $halalStatus;
