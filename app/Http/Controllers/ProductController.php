@@ -26,11 +26,11 @@ class ProductController extends Controller
         try {
             Log::info('Encoding image to base64.');
             $imageBase64 = base64_encode(file_get_contents($imagePath));
+          
             Log::info('Image encoded successfully.');
 
             $client = new \GuzzleHttp\Client();
             Log::info('Sending request to Roboflow API.');
-
             $response = $client->post(env('ROBOFLOW_API_URL'), [
                 'headers' => [
                     'Content-Type' => 'application/x-www-form-urlencoded',
@@ -41,7 +41,9 @@ class ProductController extends Controller
                 'body' => $imageBase64,
             ]);
 
+
             Log::info('Received response from Roboflow.');
+          
             return json_decode($response->getBody()->getContents(), true);
         } catch (\Exception $e) {
             Log::error('Error while sending request to Roboflow: ' . $e->getMessage());
@@ -105,7 +107,7 @@ class ProductController extends Controller
 
                 $validatedData['p_gambar'] = $filename;
                 $validatedData['halal_status'] = $halalStatus;
-                $validatedData['penjual_p_id'] = auth()->id();
+                $validatedData['penjual_p_id'] = Auth::id();
 
                 produk::create($validatedData);
 
@@ -146,11 +148,10 @@ class ProductController extends Controller
             if ($produk->p_gambar && file_exists(public_path('images/' . $produk->p_gambar))) {
                 unlink(public_path('images/' . $produk->p_gambar));
             }
-
+          
             $file = $request->file('p_gambar');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images'), $filename);
-
             $validatedData['p_gambar'] = $filename;
         }
 
