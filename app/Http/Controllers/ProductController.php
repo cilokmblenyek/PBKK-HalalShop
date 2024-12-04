@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\produk;
 use App\Http\Requests\StoreprodukRequest;
 use App\Http\Requests\UpdateprodukRequest;
-use App\Services\RoboflowService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -25,13 +24,13 @@ class ProductController extends Controller
     private function sendToRoboflow($imagePath)
     {
         try {
-            // Convert the image to base64
+            Log::info('Encoding image to base64.');
             $imageBase64 = base64_encode(file_get_contents($imagePath));
+          
+            Log::info('Image encoded successfully.');
 
-            // Prepare the GuzzleHttp client
             $client = new \GuzzleHttp\Client();
-
-            // Make the POST request to Roboflow API
+            Log::info('Sending request to Roboflow API.');
             $response = $client->post(env('ROBOFLOW_API_URL'), [
                 'headers' => [
                     'Content-Type' => 'application/x-www-form-urlencoded',
@@ -42,19 +41,20 @@ class ProductController extends Controller
                 'body' => $imageBase64,
             ]);
 
-            // Parse the response and return the JSON result
+
+            Log::info('Received response from Roboflow.');
+          
             return json_decode($response->getBody()->getContents(), true);
         } catch (\Exception $e) {
-            // Handle errors
+            Log::error('Error while sending request to Roboflow: ' . $e->getMessage());
             return ['error' => $e->getMessage()];
         }
     }
 
-    // Read Function
+
     public function index(Request $request)
     {
         $filters = $request->only(['search']);
-
         return view('dashboard', [
             "produkku" => produk::filter($filters)->get()
         ]);
@@ -62,12 +62,9 @@ class ProductController extends Controller
 
     public function create()
     {
-
-        return view('products.buat');
+        return view('products.buat'); 
     }
 
-
-    // Store Function
     public function store(StoreprodukRequest $request)
     {
         $validatedData = $request->validate([
@@ -81,63 +78,62 @@ class ProductController extends Controller
             'p_berat' => 'required|integer',
         ]);
 
-        if (!$request->hasFile('p_gambar')) {
-            return back()->withError('No file uploaded.');
+        if ($request->hasFile('p_gambar') && $request->file('p_gambar')->isValid()) {
+            try {
+                $file = $request->file('p_gambar');
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+                // Simpan file di public/images
+                $file->move(public_path('images'), $filename);
+
+                // Resize gambar (gunakan path di public/images)
+                $fullPath = public_path("images/{$filename}");
+                resizeImage($fullPath, 640, 640);
+
+                $response = $this->sendToRoboflow($fullPath);
+
+                if (isset($response['error'])) {
+                    Log::error('Roboflow Error: ' . $response['error']);
+                    return back()->withError('Failed to process image with Roboflow.');
+                }
+
+                if (empty($response['predictions'])) {
+                    Log::info('No predictions found in Roboflow response.');
+                    return back()->withError('No objects detected in the image. Please use a clearer image.');
+                }
+
+                $highestConfidencePrediction = $response['predictions'][0];
+                $halalStatus = ($highestConfidencePrediction['confidence'] > 0.4) ? 'Halal' : 'Unsure';
+
+                $validatedData['p_gambar'] = $filename;
+                $validatedData['halal_status'] = $halalStatus;
+                $validatedData['penjual_p_id'] = Auth::id();
+
+                produk::create($validatedData);
+
+                return redirect()->route('dashboard')->with('success', "Product created successfully! Halal Status: {$halalStatus}");
+            } catch (\Exception $e) {
+                Log::error('File Upload or Processing Error: ' . $e->getMessage());
+                return back()->withError('An error occurred during file upload or processing. Please try again.');
+            }
         }
 
-        $file = $request->file('p_gambar');
-        if (!$file->isValid()) {
-            return back()->withError('File upload failed.');
-        }
-
-        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('images'), $filename);
-
-        $fileFullPath = public_path("images/{$filename}");
-        if (!file_exists($fileFullPath)) {
-            return back()->withError('File not found after being uploaded.');
-        }
-
-        // Resize for Roboflow
-        resizeImage($fileFullPath, 640, 640);
-
-        $response = $this->sendToRoboflow($fileFullPath);
-        if (isset($response['error'])) {
-            Log::error('Roboflow Error: ' . $response['error']);
-            return back()->withError('Failed to process image with Roboflow.');
-        }
-
-        Log::info('Roboflow Response: ', $response);
-
-        $halalStatus = ($response['predictions'][0]['confidence'] > 0.4) ? 'Halal' : 'Unsure';
-
-        $validatedData['p_gambar'] = $filename;
-        $validatedData['halal_status'] = $halalStatus;
-        $validatedData['penjual_p_id'] = Auth::id();
-
-        produk::create($validatedData);
-
-        return redirect()->route('dashboard')
-            ->with('success', "Product created successfully! Halal Status: {$halalStatus}");
+        return back()->withError('File upload failed or invalid file.');
     }
 
-    // Show product details
+
     public function show(produk $produk)
     {
-        return view('products.show', compact('produk')); // Menggunakan view untuk menampilkan detail
+        return view('products.show', compact('produk'));
     }
 
-    // Show the form for editing the specified resource
     public function edit(produk $produk)
     {
         return view('products.edit', compact('produk'));
     }
 
-
-    // Update Function
     public function update(UpdateprodukRequest $request, produk $produk)
     {
-        // Validasi data yang diinput
         $validatedData = $request->validate([
             'p_nama' => 'required|string',
             'p_harga' => 'required|integer',
@@ -148,37 +144,28 @@ class ProductController extends Controller
             'p_berat' => 'required|integer',
         ]);
 
-        // Jika ada gambar baru yang diunggah, hapus gambar lama dan simpan yang baru
         if ($request->hasFile('p_gambar')) {
-            // Hapus gambar lama jika ada dan file-nya benar-benar ada di server
             if ($produk->p_gambar && file_exists(public_path('images/' . $produk->p_gambar))) {
                 unlink(public_path('images/' . $produk->p_gambar));
             }
-
-            // Simpan gambar baru
+          
             $file = $request->file('p_gambar');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images'), $filename);
-
-            // Set the new filename in the validated data array
             $validatedData['p_gambar'] = $filename;
         }
 
-        // Update produk dengan data yang telah divalidasi
         $produk->update($validatedData);
 
         return redirect()->route('dashboard')->with('success', 'Produk berhasil diperbarui.');
     }
 
-    // Delete Function
     public function destroy(produk $produk)
     {
-        // Delete the product image if it exists
         if ($produk->p_gambar && Storage::disk('public')->exists("images/{$produk->p_gambar}")) {
             Storage::disk('public')->delete("images/{$produk->p_gambar}");
         }
 
-        // Delete the product from the database
         $produk->delete();
 
         return redirect()->route('dashboard')->with('success', 'Produk berhasil dihapus.');
