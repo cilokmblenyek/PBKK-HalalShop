@@ -23,6 +23,10 @@
                         @csrf
 
                         <div class="mb-4">
+                            <input type="hidden" name="penjual_p_id" value="{{ Auth::id() }}">
+                        </div>
+
+                        <div class="mb-4">
                             <label for="p_id" class="block text-gray-700 dark:text-gray-200">Product id</label>
                             <input type="text" name="p_id" id="p_id"
                                 class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
@@ -67,12 +71,6 @@
                         <div class="mb-4">
                             <label for="p_berat" class="block text-gray-700 dark:text-gray-200">Weight (grams)</label>
                             <input type="number" name="p_berat" id="p_berat"
-                                class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="penjual_id" class="block text-gray-700 dark:text-gray-200">Seller ID</label>
-                            <input type="number" name="penjual_p_id" id="penjual_p_id"
                                 class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
                         </div>
 

@@ -27,10 +27,10 @@ class ProductController extends Controller
         try {
             // Convert the image to base64
             $imageBase64 = base64_encode(file_get_contents($imagePath));
-    
+
             // Prepare the GuzzleHttp client
             $client = new \GuzzleHttp\Client();
-    
+
             // Make the POST request to Roboflow API
             $response = $client->post(env('ROBOFLOW_API_URL'), [
                 'headers' => [
@@ -41,7 +41,7 @@ class ProductController extends Controller
                 ],
                 'body' => $imageBase64,
             ]);
-    
+
             // Parse the response and return the JSON result
             return json_decode($response->getBody()->getContents(), true);
         } catch (\Exception $e) {
@@ -54,7 +54,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['search']);
-        
+
         return view('dashboard', [
             "produkku" => produk::filter($filters)->get()
         ]);
@@ -62,11 +62,11 @@ class ProductController extends Controller
 
     public function create()
     {
-        
-        return view('products.buat'); 
+
+        return view('products.buat');
     }
 
-    
+
     // Store Function
     public function store(StoreprodukRequest $request)
     {
@@ -113,7 +113,7 @@ class ProductController extends Controller
 
         $validatedData['p_gambar'] = $filename;
         $validatedData['halal_status'] = $halalStatus;
-        $validatedData['penjual_p_id'] = auth()->id();
+        $validatedData['penjual_p_id'] = Auth::id();
 
         produk::create($validatedData);
 
@@ -130,10 +130,10 @@ class ProductController extends Controller
     // Show the form for editing the specified resource
     public function edit(produk $produk)
     {
-        return view('products.edit', compact('produk')); 
+        return view('products.edit', compact('produk'));
     }
-    
-    
+
+
     // Update Function
     public function update(UpdateprodukRequest $request, produk $produk)
     {
@@ -154,12 +154,12 @@ class ProductController extends Controller
             if ($produk->p_gambar && file_exists(public_path('images/' . $produk->p_gambar))) {
                 unlink(public_path('images/' . $produk->p_gambar));
             }
-            
+
             // Simpan gambar baru
             $file = $request->file('p_gambar');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images'), $filename);
-            
+
             // Set the new filename in the validated data array
             $validatedData['p_gambar'] = $filename;
         }
