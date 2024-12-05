@@ -10,6 +10,9 @@
             font-family: 'Inter', sans-serif;
         }
     </style>
+
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
     <!-- Navigation Bar -->
