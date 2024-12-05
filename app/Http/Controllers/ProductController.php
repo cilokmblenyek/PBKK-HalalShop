@@ -84,7 +84,7 @@ class ProductController extends Controller
                 // Simpan file di public/images
                 $file->move(public_path('images'), $filename);
 
-                // Resize gambar (gunakan path di public/images)
+                // Resize gambar 
                 $fullPath = public_path("images/{$filename}");
                 resizeImage($fullPath, 640, 640);
 

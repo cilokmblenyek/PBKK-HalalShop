@@ -5,9 +5,9 @@
     use App\Http\Controllers\CartController;
     use App\Http\Controllers\ProductController;
 
-    Route::get('/', function () {
+    Route::get('/welcome', function () {
         return view('welcome');
-    });
+    })->name('welcome');
 
     Route::get('/dashboard', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/produk/{produk}', [ProductController::class, 'show'])->name('products.show');
