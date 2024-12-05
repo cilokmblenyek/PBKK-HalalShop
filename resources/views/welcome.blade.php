@@ -46,7 +46,7 @@
     <section class="relative flex flex-col items-center justify-center min-h-screen text-center bg-gradient-to-br from-green-400 via-green-300 to-green-200 dark:from-green-800 dark:to-green-700">
         <div class="max-w-4xl px-6">
             <h1 class="text-5xl lg:text-7xl font-extrabold text-white drop-shadow-lg">
-                Welcome to Halal Shop
+                Halal Shop
             </h1>
             <p class="mt-6 text-lg lg:text-2xl text-white/80">
                 Simplifying the way you find Halal-certified products with confidence.

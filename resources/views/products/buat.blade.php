@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-            {{ __('Create New Product') }}
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Create Product') }}
         </h2>
     </x-slot>
 
@@ -22,7 +22,6 @@
                     <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
-<<<<<<< HEAD
                         <!-- Product ID -->
                         <div class="mb-6">
                             <label for="p_id" class="block text-sm font-medium text-gray-700">
@@ -30,16 +29,6 @@
                             </label>
                             <input type="text" name="p_id" id="p_id" placeholder="Enter product ID"
                                 class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
-=======
-                        <div class="mb-4">
-                            <input type="hidden" name="penjual_p_id" value="{{ Auth::id() }}">
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="p_id" class="block text-gray-700 dark:text-gray-200">Product id</label>
-                            <input type="text" name="p_id" id="p_id"
-                                class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
->>>>>>> dc4303fe87e55f08268c71760d50e2dfef482ce5
                         </div>
 
                         <!-- Product Name -->
@@ -105,7 +94,6 @@
                                 class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
                         </div>
 
-<<<<<<< HEAD
                         <!-- Seller ID -->
                         <div class="mb-6">
                             <label for="penjual_id" class="block text-sm font-medium text-gray-700">
@@ -117,9 +105,6 @@
 
                         <!-- Submit Button -->
                         <div class="flex items-center justify-end">
-=======
-                        <div class="flex items-center justify-end mt-4">
->>>>>>> dc4303fe87e55f08268c71760d50e2dfef482ce5
                             <button type="submit"
                                 class="px-6 py-2 bg-green-600 text-white font-medium rounded-lg shadow-md hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
                                 Create Product
