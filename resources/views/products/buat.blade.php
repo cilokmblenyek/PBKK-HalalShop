@@ -1,17 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Create New Product') }}
+            {{ __('Create Product') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-white shadow-md sm:rounded-lg">
+                <div class="p-6 text-gray-800">
                     @if ($errors->any())
                         <div class="mb-4">
-                            <ul class="list-disc list-inside text-sm text-red-600 dark:text-red-400">
+                            <ul class="list-disc list-inside text-sm text-red-600">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
@@ -22,61 +22,91 @@
                     <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
-                        <div class="mb-4">
-                            <input type="hidden" name="penjual_p_id" value="{{ Auth::id() }}">
+                        <!-- Product ID -->
+                        <div class="mb-6">
+                            <label for="p_id" class="block text-sm font-medium text-gray-700">
+                                Product ID
+                            </label>
+                            <input type="text" name="p_id" id="p_id" placeholder="Enter product ID"
+                                class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
                         </div>
 
-                        <div class="mb-4">
-                            <label for="p_id" class="block text-gray-700 dark:text-gray-200">Product id</label>
-                            <input type="text" name="p_id" id="p_id"
-                                class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                        <!-- Product Name -->
+                        <div class="mb-6">
+                            <label for="p_nama" class="block text-sm font-medium text-gray-700">
+                                Product Name
+                            </label>
+                            <input type="text" name="p_nama" id="p_nama" placeholder="Enter product name"
+                                class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
                         </div>
 
-                        <div class="mb-4">
-                            <label for="p_nama" class="block text-gray-700 dark:text-gray-200">Product Name</label>
-                            <input type="text" name="p_nama" id="p_nama"
-                                class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                        <!-- Price -->
+                        <div class="mb-6">
+                            <label for="p_harga" class="block text-sm font-medium text-gray-700">
+                                Price
+                            </label>
+                            <input type="number" name="p_harga" id="p_harga" placeholder="Enter price"
+                                class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
                         </div>
 
-                        <div class="mb-4">
-                            <label for="p_harga" class="block text-gray-700 dark:text-gray-200">Price</label>
-                            <input type="number" name="p_harga" id="p_harga"
-                                class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                        <!-- Stock -->
+                        <div class="mb-6">
+                            <label for="p_stok" class="block text-sm font-medium text-gray-700">
+                                Stock
+                            </label>
+                            <input type="number" name="p_stok" id="p_stok" placeholder="Enter stock quantity"
+                                class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
                         </div>
 
-                        <div class="mb-4">
-                            <label for="p_stok" class="block text-gray-700 dark:text-gray-200">Stock</label>
-                            <input type="number" name="p_stok" id="p_stok"
-                                class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                        <!-- Description -->
+                        <div class="mb-6">
+                            <label for="p_deskripsi" class="block text-sm font-medium text-gray-700">
+                                Description
+                            </label>
+                            <textarea name="p_deskripsi" id="p_deskripsi" rows="4" placeholder="Enter product description"
+                                class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none"></textarea>
                         </div>
 
-                        <div class="mb-4">
-                            <label for="p_deskripsi" class="block text-gray-700 dark:text-gray-200">Description</label>
-                            <textarea name="p_deskripsi" id="p_deskripsi"
-                                class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md"></textarea>
+                        <!-- Category -->
+                        <div class="mb-6">
+                            <label for="p_kategori" class="block text-sm font-medium text-gray-700">
+                                Category
+                            </label>
+                            <input type="text" name="p_kategori" id="p_kategori" placeholder="Enter product category"
+                                class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
                         </div>
 
-                        <div class="mb-4">
-                            <label for="p_kategori" class="block text-gray-700 dark:text-gray-200">Category</label>
-                            <input type="text" name="p_kategori" id="p_kategori"
-                                class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="p_gambar" class="block text-gray-700 dark:text-gray-200">Product Image</label>
+                        <!-- Product Image -->
+                        <div class="mb-6">
+                            <label for="p_gambar" class="block text-sm font-medium text-gray-700">
+                                Product Image
+                            </label>
                             <input type="file" name="p_gambar" id="p_gambar"
-                                class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                                class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
                         </div>
 
-                        <div class="mb-4">
-                            <label for="p_berat" class="block text-gray-700 dark:text-gray-200">Weight (grams)</label>
-                            <input type="number" name="p_berat" id="p_berat"
-                                class="w-full mt-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md">
+                        <!-- Weight -->
+                        <div class="mb-6">
+                            <label for="p_berat" class="block text-sm font-medium text-gray-700">
+                                Weight (grams)
+                            </label>
+                            <input type="number" name="p_berat" id="p_berat" placeholder="Enter product weight"
+                                class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
                         </div>
 
-                        <div class="flex items-center justify-end mt-4">
+                        <!-- Seller ID -->
+                        <div class="mb-6">
+                            <label for="penjual_id" class="block text-sm font-medium text-gray-700">
+                                Seller ID
+                            </label>
+                            <input type="number" name="penjual_p_id" id="penjual_p_id" placeholder="Enter seller ID"
+                                class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex items-center justify-end">
                             <button type="submit"
-                                class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-500">
+                                class="px-6 py-2 bg-green-600 text-white font-medium rounded-lg shadow-md hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
                                 Create Product
                             </button>
                         </div>

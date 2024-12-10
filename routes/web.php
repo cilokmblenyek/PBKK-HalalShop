@@ -7,7 +7,7 @@
 
     Route::get('/', function () {
         return view('welcome');
-    });
+    })->name('welcome');
 
     Route::get('/dashboard', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/produk/{produk}', [ProductController::class, 'show'])->name('products.show');

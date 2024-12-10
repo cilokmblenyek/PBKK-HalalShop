@@ -86,29 +86,37 @@ class ProductController extends Controller
                 // Simpan file di public/images
                 $file->move(public_path('images'), $filename);
 
-                // Resize gambar (gunakan path di public/images)
+                // Resize gambar 
                 $fullPath = public_path("images/{$filename}");
                 resizeImage($fullPath, 640, 640);
 
                 $response = $this->sendToRoboflow($fullPath);
 
-                if (isset($response['error'])) {
-                    Log::error('Roboflow Error: ' . $response['error']);
-                    return back()->withError('Failed to process image with Roboflow.');
+                if (!$response || isset($response['error'])) {
+                    // Log error if there's no response or an error is encountered
+                    $errorMessage = $response['error'] ?? 'No response from Roboflow.';
+                    Log::error('Roboflow Error: ' . $errorMessage);
+
+                    // Set default Halal Status to 'Unsure'
+                    $halalStatus = 'Unsure';
+                } else {
+                    // Check if predictions exist in the response
+                    if (empty($response['predictions'])) {
+                        Log::info('No predictions found in Roboflow response.');
+                        $halalStatus = 'Unsure';
+                    } else {
+                        // Use the highest confidence prediction
+                        $highestConfidencePrediction = $response['predictions'][0];
+                        $halalStatus = ($highestConfidencePrediction['confidence'] > 0.4) ? 'Halal' : 'Unsure';
+                    }
                 }
 
-                if (empty($response['predictions'])) {
-                    Log::info('No predictions found in Roboflow response.');
-                    return back()->withError('No objects detected in the image. Please use a clearer image.');
-                }
-
-                $highestConfidencePrediction = $response['predictions'][0];
-                $halalStatus = ($highestConfidencePrediction['confidence'] > 0.4) ? 'Halal' : 'Unsure';
-
+                // Ensure required data is prepared
                 $validatedData['p_gambar'] = $filename;
                 $validatedData['halal_status'] = $halalStatus;
                 $validatedData['penjual_p_id'] = Auth::id();
 
+                // Create the product
                 produk::create($validatedData);
 
                 return redirect()->route('dashboard')->with('success', "Product created successfully! Halal Status: {$halalStatus}");

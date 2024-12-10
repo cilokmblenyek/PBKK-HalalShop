@@ -5,49 +5,61 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-white shadow-md sm:rounded-lg">
+                <div class="p-6 text-gray-800">
 
                     <!-- Search Bar -->
-                    <form action="{{ route('dashboard') }}" method="GET" class="mb-6">
+                    <form action="{{ route('dashboard') }}" method="GET" class="flex flex-wrap items-center gap-4 mb-8">
                         <input type="text" name="search" id="search" placeholder="Search for products..."
-                            class="px-4 py-2 w-full md:w-1/2 rounded-md bg-gray-200 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            class="px-4 py-2 flex-grow max-w-full md:max-w-md rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        >
                         <button type="submit"
-                            class="ml-2 inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
+                            class="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
                             Search
                         </button>
                     </form>
 
+                    <!-- Create Product Button -->
                     <a href="{{ route('products.create') }}" method="GET"
-                        class="inline-block mb-4 px-4 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-500">
+                        class="mb-8 inline-block px-6 py-2 bg-green-600 text-white font-medium rounded-lg shadow-md hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
                         Create New Product
                     </a>
 
                     <!-- Product Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($produkku as $product)
-                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-lg">
-                                <img src="{{ URL::asset('images/' . $product->p_gambar) }}" alt="{{ $product->p_nama }}"
-                                    class="w-full h-40 object-cover rounded-t-lg">
+                            <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden">
+                                <!-- Product Image -->
+                                <img src="{{ URL::asset('images/' . $product->p_gambar) }}" 
+                                     alt="{{ $product->p_nama }}" 
+                                     class="w-full h-48 object-cover">
                                 <div class="p-4">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    <!-- Product Name -->
+                                    <h3 class="text-lg font-bold text-gray-800">
                                         {{ $product->p_nama }}
                                     </h3>
-                                    <p class="text-gray-600 dark:text-gray-400">{{ $product->p_deskripsi }}</p>
+                                    <!-- Product Description -->
+                                    <p class="mt-2 text-gray-600">
+                                        {{ $product->p_deskripsi }}
+                                    </p>
+                                    <!-- Product Price -->
                                     <div class="mt-4">
-                                        <span
-                                            class="text-green-500 font-bold">Rp{{ number_format($product->p_harga, 0, ',', '.') }}</span>
+                                        <span class="text-green-600 font-semibold text-lg">
+                                            Rp{{ number_format($product->p_harga, 0, ',', '.') }}
+                                        </span>
                                     </div>
-                                    <div class="mt-4">
-                                        <a href="{{ route('products.show', $product->p_id) }}">
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                Detail Produk</h3>
+                                    <!-- Product Actions -->
+                                    <div class="mt-6 flex items-center gap-4">
+                                        <!-- Detail Product -->
+                                        <a href="{{ route('products.show', $product->p_id) }}" 
+                                           class="text-sm text-gray-800 hover:text-gray-900 font-medium">
+                                            Detail Produk
                                         </a>
                                         <!-- Add to Cart Button -->
                                         <a href="{{ route('cart.add', $product->p_id) }}"
-                                            class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
+                                            class="px-4 py-2 bg-green-600 text-white font-medium rounded-lg shadow-md hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
                                             Add to Cart
                                         </a>
                                     </div>
