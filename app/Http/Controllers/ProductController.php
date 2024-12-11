@@ -134,8 +134,6 @@ class ProductController extends Controller
 
     public function show(produk $produk)
     {
-
-
         $previous = Produk::where('p_id', '<', $produk->p_id)
             ->orderBy('p_id', 'desc')
             ->first();
