@@ -136,6 +136,7 @@ class ProductController extends Controller
     {
 
 
+
         $previous = Produk::where('p_id', '<', $produk->p_id)
             ->orderBy('p_id', 'desc')
             ->first();
