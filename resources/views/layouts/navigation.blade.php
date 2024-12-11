@@ -5,7 +5,7 @@
             <!-- Logo -->
             <div class="flex items-center">
                 <a href="{{ route('welcome') }}">
-                    <img src="{{ asset('storage/images/logo.png') }}" alt="Logo" class="h-10 w-auto">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10 w-auto">
                 </a>
             </div>
 
@@ -106,6 +106,6 @@
             </div>
         </div>
 
-        
+
     </div>
 </nav>

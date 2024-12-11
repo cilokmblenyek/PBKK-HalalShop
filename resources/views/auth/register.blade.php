@@ -1,4 +1,7 @@
 <x-guest-layout>
+    <div class="bg-white">
+
+    </div>
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -19,8 +22,8 @@
         </div>
 
         <div>
-            <label for="role">Role</label>
-            <select name="role" id="role" required>
+            <x-input-label for="role" class="mt-3" :value="__('Role')" />
+            <select name="role" class="block mt-1 w-full rounded" id="role" required>
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
             </select>
