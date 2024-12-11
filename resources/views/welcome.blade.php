@@ -17,39 +17,54 @@
     </style>
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
 </head>
-<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+<body class="bg-gray-50 text-gray-800 white:bg-gray-900 white:text-gray-100">
     <!-- Navigasi -->
-    <header class="fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow-md z-50">
+    <!-- Navigasi -->
+    <header class="fixed top-0 left-0 w-full bg-gradient-to-r from-white to-gray-100 shadow-lg z-50">
         <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between py-4">
+            <!-- Logo Section -->
             <div class="flex items-center space-x-4">
-                <img src="{{ asset('assets/images/final-logo-type1.png') }}" alt="Logo" class="w-36 h-auto">
+                <img src="{{ asset('assets/images/final-logo-type1.png') }}" alt="Logo" class="w-40 h-auto">
             </div>
-            <div class="flex items-center space-x-2">
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}" 
-                           class="px-6 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold rounded-lg shadow-lg hover:from-emerald-600 hover:to-emerald-700 focus:ring-4 focus:ring-emerald-300 transition">
-                            Dashboard
+            
+            <!-- Navigation Links -->
+            <header class="fixed top-0 left-0 w-full bg-gradient-to-r from-white to-gray-50 shadow-md border-b border-gray-200 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between py-4">
+        <!-- Logo Section -->
+        <div class="flex items-center space-x-4">
+            <img src="{{ asset('assets/images/final-logo-type1.png') }}" alt="Logo" class="w-40 h-auto">
+        </div>
+        
+        <!-- Navigation Links -->
+        <div class="flex items-center space-x-4">
+            @if (Route::has('login'))
+                @auth
+                    <a href="{{ url('/dashboard') }}" 
+                       class="px-6 py-2 bg-gradient-to-r from-green-500 to-green-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl hover:from-green-600 hover:to-green-600 focus:ring-4 focus:ring-green-300 transition-all duration-300">
+                        Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" 
+                       class="px-6 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 hover:shadow-lg focus:ring-4 focus:ring-green-300 transition-all duration-300">
+                        Masuk
+                    </a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" 
+                           class="px-6 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 hover:shadow-lg focus:ring-4 focus:ring-green-300 transition-all duration-300">
+                            Daftar
                         </a>
-                    @else
-                        <a href="{{ route('login') }}" 
-                           class="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 focus:ring-4 focus:ring-emerald-300 transition">
-                            Masuk
-                        </a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" 
-                               class="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 focus:ring-4 focus:ring-emerald-300 transition">
-                                Daftar
-                            </a>
-                        @endif
-                    @endauth
-                @endif
-            </div>
+                    @endif
+                @endauth
+            @endif
+        </div>
+    </div>
+</header>
+
         </div>
     </header>
 
     <!-- Hero Section dengan Carousel -->
-    <section class="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-emerald-400 via-emerald-300 to-emerald-200 dark:from-emerald-800 dark:to-emerald-700 pt-24">
+    <section class="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-green-400 via-green-300 to-green-200 white:from-green-800 white:to-green-700 pt-24">
         <!-- Carousel -->
         <div class="absolute inset-0 w-full h-full overflow-hidden">
             <div class="carousel flex w-full h-full transition-transform duration-700 ease-in-out" style="transform: translateX(0);">
@@ -110,74 +125,74 @@
     </script>
 
     <!-- Section Kategori -->
-    <section id="categories" class="py-20 bg-white dark:bg-gray-800">
+    <section id="categories" class="py-20 bg-white white:bg-gray-800">
         <div class="max-w-7xl mx-auto px-6 lg:px-12">
-            <h2 class="text-4xl font-bold text-center text-gray-800 dark:text-gray-100">Kategori Produk</h2>
-            <p class="mt-4 text-lg text-center text-gray-600 dark:text-gray-300">Jelajahi berbagai kategori produk Halal.</p>
+            <h2 class="text-4xl font-bold text-center text-gray-800 white:text-gray-100">Kategori Produk</h2>
+            <p class="mt-4 text-lg text-center text-gray-600 white:text-gray-300">Jelajahi berbagai kategori produk Halal.</p>
             
             <div class="mt-12 grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 <!-- Kategori 1 -->
-                <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
-                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <div class="bg-gray-50 white:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 white:bg-gray-700 rounded-lg overflow-hidden">
                         <img src="{{ asset('assets/images/category_halal_food.jpg') }}" alt="Halal Food" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-100">Makanan</h3>
+                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 white:text-gray-100">Makanan</h3>
                 </div>
                 
                 <!-- Kategori 2 -->
-                <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
-                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <div class="bg-gray-50 white:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 white:bg-gray-700 rounded-lg overflow-hidden">
                         <img src="{{ asset('assets/images/category_halal_cosmetic.jpg') }}" alt="Halal Cosmetic" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-100">Kosmetik</h3>
+                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 white:text-gray-100">Kosmetik</h3>
                 </div>
 
                 <!-- Kategori 3 -->
-                <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
-                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <div class="bg-gray-50 white:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 white:bg-gray-700 rounded-lg overflow-hidden">
                         <img src="{{ asset('assets/images/category_halal_beverages.jpg') }}" alt="Halal Beverages" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-100">Minuman</h3>
+                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 white:text-gray-100">Minuman</h3>
                 </div>
                 
                 <!-- Kategori 4 -->
-                <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
-                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <div class="bg-gray-50 white:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 white:bg-gray-700 rounded-lg overflow-hidden">
                         <img src="{{ asset('assets/images/category_halal_fashion.jpg') }}" alt="Halal Fashion" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-100">Fashion</h3>
+                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 white:text-gray-100">Fashion</h3>
                 </div>
 
                 <!-- Kategori 5 -->
-                <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
-                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <div class="bg-gray-50 white:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 white:bg-gray-700 rounded-lg overflow-hidden">
                         <img src="{{ asset('assets/images/category_halal_electronic.jpg') }}" alt="Halal Electronics" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-100">Elektronik</h3>
+                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 white:text-gray-100">Elektronik</h3>
                 </div>
 
                 <!-- Kategori 6 -->
-                <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
-                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <div class="bg-gray-50 white:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 white:bg-gray-700 rounded-lg overflow-hidden">
                         <img src="{{ asset('assets/images/category_halal_tools.jpg') }}" alt="Halal Tools" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-100">Peralatan Rumah</h3>
+                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 white:text-gray-100">Peralatan Rumah</h3>
                 </div>
 
                 <!-- Kategori 7 -->
-                <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
-                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <div class="bg-gray-50 white:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 white:bg-gray-700 rounded-lg overflow-hidden">
                         <img src="{{ asset('assets/images/category_halal_hygine.jpg') }}" alt="Halal Hygiene" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-100">Kesehatan & Kebersihan</h3>
+                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 white:text-gray-100">Kesehatan & Kebersihan</h3>
                 </div>
 
                 <!-- Kategori 8 -->
-                <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
-                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <div class="bg-gray-50 white:bg-gray-900 p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <div class="w-full h-40 flex items-center justify-center bg-gray-200 white:bg-gray-700 rounded-lg overflow-hidden">
                         <img src="{{ asset('assets/images/category_halal_book.jpg') }}" alt="Halal Books" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-100">Buku & Edukasi</h3>
+                    <h3 class="mt-4 text-xl font-semibold text-center text-gray-800 white:text-gray-100">Buku & Edukasi</h3>
                 </div>
             </div>
         </div>
@@ -185,9 +200,9 @@
 
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-100 py-6 text-center">
+    <footer class="bg-gray-50 text-gray-900 py-6 shadow-md border-b text-center">
         <p class="text-sm">
-            Situs ini masih dalam tahap pengembangan. Jika Anda tertarik untuk bekerja sama, <a href="mailto:your-email@example.com" class="text-emerald-400 underline">hubungi kami</a>.
+            Situs ini masih dalam tahap pengembangan. Jika Anda tertarik untuk bekerja sama, <a href="mailto:your-email@example.com" class="text-green-600 underline">hubungi kami</a>.
         </p>
     </footer>
 </body>

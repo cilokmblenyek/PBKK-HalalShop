@@ -1,7 +1,8 @@
 <x-guest-layout>
     <div class="bg-white">
-
+        
     </div>
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
