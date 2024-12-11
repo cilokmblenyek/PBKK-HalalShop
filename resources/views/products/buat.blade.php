@@ -81,7 +81,7 @@
                             <label for="p_gambar" class="block text-sm font-medium text-gray-700">
                                 Product Image
                             </label>
-                            <input type="file" name="p_gambar" id="p_gambar"
+                            <input type="file" name="p_gambar" id="p_gambar" accept="image/*"
                                 class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none">
                         </div>
 
