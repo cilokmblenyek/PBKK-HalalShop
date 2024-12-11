@@ -113,7 +113,7 @@
     <section id="categories" class="py-20 bg-white dark:bg-gray-800">
         <div class="max-w-7xl mx-auto px-6 lg:px-12">
             <h2 class="text-4xl font-bold text-center text-gray-800 dark:text-gray-100">Kategori Produk</h2>
-            <p class="mt-4 text-lg text-center text-gray-600 dark:text-gray-300">Jelajahi berbagai kategori produk Halal yang kami sediakan.</p>
+            <p class="mt-4 text-lg text-center text-gray-600 dark:text-gray-300">Jelajahi berbagai kategori produk Halal.</p>
             
             <div class="mt-12 grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 <!-- Kategori 1 -->
