@@ -22,7 +22,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 antialiased">
+<body class=" text-gray-800 bg-white dark:text-gray-100 antialiased">
     <div class="min-h-screen flex flex-col">
         <!-- Navigation Bar -->
         @include('layouts.navigation')
@@ -42,9 +42,9 @@
         </main>
 
         <!-- Footer -->
-        <footer class="bg-gray-900 text-gray-100 py-6 text-center">
+        <footer class="bg-green-900 text-gray-100 py-6 text-center">
             <p class="text-sm">
-                This website is in the development phase. If you're interested in collaborating, 
+                This website is in the development phase. If you're interested in collaborating,
                 <a href="mailto:your-email@example.com" class="text-green-400 underline">contact us</a>.
             </p>
         </footer>

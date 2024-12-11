@@ -5,7 +5,7 @@
             <!-- Logo -->
             <div class="flex items-center">
                 <a href="{{ route('welcome') }}">
-                    <img src="{{ asset('storage/images/logo.png') }}" alt="Logo" class="h-10 w-auto">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10 w-auto">
                 </a>
             </div>
 
@@ -26,6 +26,18 @@
                         <path d="M16 16a3 3 0 11-6 0" />
                     </svg>
                     <span>Cart</span>
+                </a>
+            </div>
+
+
+            <div class="hidden sm:flex items-center space-x-4">
+                <a href="{{ route('dashboard') }}"
+                    class="flex items-center space-x-2 px-4 py-2 bg-white text-green-600 font-semibold rounded-lg hover:bg-gray-100 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span>Dashboard</span>
                 </a>
             </div>
 
@@ -106,6 +118,6 @@
             </div>
         </div>
 
-        
+
     </div>
 </nav>

@@ -26,7 +26,7 @@ class ProductController extends Controller
         try {
             Log::info('Encoding image to base64.');
             $imageBase64 = base64_encode(file_get_contents($imagePath));
-          
+
             Log::info('Image encoded successfully.');
 
             $client = new \GuzzleHttp\Client();
@@ -43,7 +43,7 @@ class ProductController extends Controller
 
 
             Log::info('Received response from Roboflow.');
-          
+
             return json_decode($response->getBody()->getContents(), true);
         } catch (\Exception $e) {
             Log::error('Error while sending request to Roboflow: ' . $e->getMessage());
@@ -62,11 +62,13 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('products.buat'); 
+        return view('products.buat');
     }
 
     public function store(StoreprodukRequest $request)
     {
+
+
         $validatedData = $request->validate([
             'p_id' => 'required|unique:products,p_id',
             'p_nama' => 'required|string',
@@ -86,7 +88,7 @@ class ProductController extends Controller
                 // Simpan file di public/images
                 $file->move(public_path('images'), $filename);
 
-                // Resize gambar 
+                // Resize gambar
                 $fullPath = public_path("images/{$filename}");
                 resizeImage($fullPath, 640, 640);
 
@@ -132,7 +134,18 @@ class ProductController extends Controller
 
     public function show(produk $produk)
     {
-        return view('products.show', compact('produk'));
+
+
+        $previous = Produk::where('p_id', '<', $produk->p_id)
+            ->orderBy('p_id', 'desc')
+            ->first();
+        // dd($previous);
+
+        $next = Produk::where('p_id', '>', $produk->p_id)
+            ->orderBy('p_id', 'asc')
+            ->first();
+
+        return view('products.show', compact('produk', 'previous', 'next'));
     }
 
     public function edit(produk $produk)
@@ -156,7 +169,7 @@ class ProductController extends Controller
             if ($produk->p_gambar && file_exists(public_path('images/' . $produk->p_gambar))) {
                 unlink(public_path('images/' . $produk->p_gambar));
             }
-          
+
             $file = $request->file('p_gambar');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images'), $filename);
