@@ -14,7 +14,6 @@ class ProdukSeeder extends Seeder
     {
         for ($i = 1; $i <= 10; $i++) {
             \App\Models\Produk::factory()->create([
-                'p_id' => $i,
                 'p_nama' => "Produk {$i}",
                 'p_gambar' => "produk-{$i}.jpg",
                 'p_harga' => $i * 1000,

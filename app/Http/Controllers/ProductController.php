@@ -134,10 +134,16 @@ class ProductController extends Controller
 
     public function show(produk $produk)
     {
+        $previous = Produk::where('p_id', '<', $produk->p_id)
+            ->orderBy('p_id', 'desc')
+            ->first();
+        // dd($previous);
 
-        $lastProduk = produk::latest()->first();
-        // dd($lastProduk->p_id);
-        return view('products.show', compact('produk','lastProduk'));
+        $next = Produk::where('p_id', '>', $produk->p_id)
+            ->orderBy('p_id', 'asc')
+            ->first();
+
+        return view('products.show', compact('produk', 'previous', 'next'));
     }
 
     public function edit(produk $produk)

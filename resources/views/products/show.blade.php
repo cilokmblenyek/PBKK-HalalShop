@@ -52,42 +52,63 @@
                             <p class="text-gray-800">{{ $produk->p_tglupdate }}</p>
                         </div>
 
-                        <!-- Update Product Button -->
-                        <a href="{{ route('products.edit', $produk) }}"
-                            class="mt-6 inline-block px-4 py-2 bg-yellow-500 text-dark font-medium rounded-lg shadow-md hover:bg-yellow-600 focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition">
-                            Update Product
-                        </a>
-
-                        <!-- Delete Product Form -->
-                        <form action="{{ route('products.destroy', $produk) }}" method="POST"
-                            class="inline-block mt-6">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                onclick="return confirm('Are you sure you want to delete this product?');"
-                                class="px-4 py-2 bg-red-600 text-white font-medium rounded-lg shadow-md hover:bg-red-700 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition">
-                                Delete Product
-                            </button>
-                        </form>
-
-                        <!-- Back to Products Button -->
-                        <a href="{{ route('dashboard') }}"
-                            class="mt-6 inline-block px-4 py-2 bg-gray-200 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-300 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition">
-                            Back to Dashboard
-                        </a>
-
-                        @if ($produk->p_id < $lastProduk->p_id)
-                            <a href="{{ route('products.show', ['produk' => $produk->p_id + 1]) }}"
-                                class="mt-6 inline-block px-4 py-2 bg-blue-500 border border-gray-300 text-white rounded-lg hover:bg-blue-600 hover:text-dark focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition">
-                                Next Produk
+                        <div class="flex justify-center space-x-1">
+                            <a href="{{ route('products.edit', $produk) }}"
+                                class="mt-6 inline-block px-4 py-2 bg-yellow-500 text-dark font-medium rounded-lg shadow-md hover:bg-yellow-600 focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition w-1/3">
+                                Update Product
                             </a>
-                        @else
-                            <button
-                                class="mt-6 inline-block px-4 py-2 bg-blue-900 border border-gray-300 text-white rounded-lg hover:bg-gray-500 hover:text-dark focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition"
-                                disabled>
-                                Last Produk
-                            </button>
-                        @endif
+
+                            <!-- Delete Product Form -->
+
+
+                            <!-- Back to Products Button -->
+                            <a href="{{ route('dashboard') }}"
+                                class="mt-6 inline-block px-4 py-2 bg-gray-200 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-300 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition w-1/3">
+                                Back to Dashboard
+                            </a>
+
+
+                            <form action="{{ route('products.destroy', $produk) }}" method="POST"
+                                class="inline-block mt-6 w-1/3">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    onclick="return confirm('Are you sure you want to delete this product?');"
+                                    class="px-4 py-2 bg-red-600 text-white font-medium rounded-lg shadow-md hover:bg-red-700 focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition px-10">
+                                    Delete Product
+                                </button>
+                            </form>
+                        </div>
+                        <!-- Update Product Button -->
+
+
+                        <div class="flex justify-between">
+                            @if ($previous)
+                                <a href="{{ route('products.show', ['produk' => $previous]) }}"
+                                    class="mt-6 inline-block px-4 py-2 bg-blue-500 border border-gray-300 text-white rounded-lg hover:bg-blue-600 hover:text-dark focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition">
+                                    Previous Produk
+                                </a>
+                            @else
+                                <button
+                                    class="mt-6 inline-block px-4 py-2 bg-blue-900 border border-gray-300 text-white rounded-lg hover:bg-gray-500 hover:text-dark focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition"
+                                    disabled>
+                                    First Produk
+                                </button>
+                            @endif
+
+                            @if ($next)
+                                <a href="{{ route('products.show', ['produk' => $next]) }}"
+                                    class="mt-6 inline-block px-4 py-2 bg-blue-500 border border-gray-300 text-white rounded-lg hover:bg-blue-600 hover:text-dark focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition">
+                                    Next Produk
+                                </a>
+                            @else
+                                <button
+                                    class="mt-6 inline-block px-4 py-2 bg-blue-900 border border-gray-300 text-white rounded-lg hover:bg-gray-500 hover:text-dark focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition"
+                                    disabled>
+                                    Last Produk
+                                </button>
+                            @endif
+                        </div>
 
                     </div>
 
