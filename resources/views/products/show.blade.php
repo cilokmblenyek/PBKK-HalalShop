@@ -52,6 +52,7 @@
                             <p class="text-gray-800">{{ $produk->p_tglupdate }}</p>
                         </div>
 
+
                         <div class="flex justify-center space-x-1">
                             <a href="{{ route('products.edit', $produk) }}"
                                 class="mt-6 inline-block px-4 py-2 bg-yellow-500 text-dark font-medium rounded-lg shadow-md hover:bg-yellow-600 focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition w-1/3">
@@ -110,6 +111,10 @@
                             @endif
                         </div>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of fe15093 (Merge branch 'main' into updatelagi)
                     </div>
 
                 </div>
