@@ -134,6 +134,11 @@ class ProductController extends Controller
 
     public function show(produk $produk)
     {
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> parent of fe15093 (Merge branch 'main' into updatelagi)
         $previous = Produk::where('p_id', '<', $produk->p_id)
             ->orderBy('p_id', 'desc')
             ->first();
